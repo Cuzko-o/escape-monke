@@ -1,3 +1,18 @@
+namespace SpriteKind {
+    export const Heart = SpriteKind.create()
+}
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (controller.B.isPressed()) {
+        mySprite.x += 20
+    }
+    pause(5000)
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (controller.A.isPressed()) {
+        mySprite.x += -20
+        pause(5000)
+    }
+})
 info.onCountdownEnd(function () {
     tiles.setCurrentTilemap(tilemap`level3`)
     info.startCountdown(60)
@@ -44,6 +59,39 @@ info.onCountdownEnd(function () {
         `, SpriteKind.Enemy)
     mySprite2.follow(mySprite, 85)
 })
+scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
+    FazeUp()
+})
+function FazeUp () {
+    tiles.setWallAt(tiles.getTileLocation(15, 4), false)
+    tiles.setWallAt(tiles.getTileLocation(13, 0), false)
+    tiles.setWallAt(tiles.getTileLocation(12, 1), false)
+    tiles.setWallAt(tiles.getTileLocation(15, 5), false)
+    tiles.setWallAt(tiles.getTileLocation(15, 6), false)
+    tiles.setWallAt(tiles.getTileLocation(17, 0), false)
+    tiles.setWallAt(tiles.getTileLocation(17, 1), false)
+    tiles.setWallAt(tiles.getTileLocation(20, 4), false)
+    tiles.setWallAt(tiles.getTileLocation(19, 5), false)
+    tiles.setWallAt(tiles.getTileLocation(21, 7), false)
+    tiles.setWallAt(tiles.getTileLocation(22, 7), false)
+    tiles.setWallAt(tiles.getTileLocation(26, 7), false)
+    tiles.setWallAt(tiles.getTileLocation(29, 3), false)
+    tiles.setWallAt(tiles.getTileLocation(29, 4), false)
+    tiles.setWallAt(tiles.getTileLocation(29, 5), false)
+    tiles.setWallAt(tiles.getTileLocation(36, 3), false)
+    tiles.setWallAt(tiles.getTileLocation(35, 3), false)
+    tiles.setWallAt(tiles.getTileLocation(35, 4), false)
+    tiles.setWallAt(tiles.getTileLocation(35, 5), false)
+    tiles.setWallAt(tiles.getTileLocation(40, 7), false)
+}
+function Sacore () {
+    textSprite = textsprite.create(convertToText(Number_score))
+    textSprite.setPosition(34, 77)
+    textSprite.setStayInScreen(true)
+    Number_score = 0
+}
+let Number_score = 0
+let textSprite: TextSprite = null
 let mySprite3: Sprite = null
 let mySprite2: Sprite = null
 let mySprite: Sprite = null
@@ -87,11 +135,8 @@ mySprite2 = sprites.create(img`
     . . . . f f f f f f f f f . . . 
     `, SpriteKind.Enemy)
 mySprite2.setPosition(160, 54)
-mySprite2.follow(mySprite, 10)
-let Number_score = 0
-let textSprite = textsprite.create(convertToText(Number_score))
-textSprite.setPosition(34, 77)
-textSprite.setStayInScreen(true)
+mySprite2.follow(mySprite, 25)
+Sacore()
 tiles.setCurrentTilemap(tilemap`level1`)
 mySprite3 = sprites.create(img`
     .........ccc........
@@ -117,30 +162,25 @@ mySprite3 = sprites.create(img`
     `, SpriteKind.Food)
 mySprite3.setScale(1, ScaleAnchor.Middle)
 mySprite3.setPosition(140, 99)
-info.setLife(3)
 scene.cameraFollowSprite(mySprite)
 info.startCountdown(60)
+info.setLife(3)
+forever(function () {
+    if (controller.anyButton.isPressed()) {
+        controller.moveSprite(mySprite, 100, 100)
+    }
+})
 forever(function () {
     Number_score += 1
     textSprite.setText(convertToText(Number_score))
 })
 forever(function () {
-    if (controller.A.isPressed()) {
-        mySprite.ay += -300
-    }
-})
-forever(function () {
-	
+    music.spooky.playUntilDone()
 })
 forever(function () {
     if (mySprite.overlapsWith(mySprite3)) {
         mySprite3.destroy()
         info.changeLifeBy(1)
-    }
-})
-forever(function () {
-    if (controller.anyButton.isPressed()) {
-        controller.moveSprite(mySprite, 100, 100)
     }
 })
 forever(function () {
