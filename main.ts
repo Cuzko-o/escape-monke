@@ -130,7 +130,7 @@ forever(function () {
     }
 })
 forever(function () {
-    music.spooky.playUntilDone()
+	
 })
 forever(function () {
     if (mySprite.overlapsWith(mySprite3)) {
